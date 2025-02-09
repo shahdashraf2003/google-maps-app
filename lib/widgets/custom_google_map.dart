@@ -10,6 +10,7 @@ class CustomGoogleMap extends StatefulWidget {
 
 class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late CameraPosition initialCameraPosition;
+  late GoogleMapController controller;
   @override
   void initState() {
     super.initState();
@@ -18,10 +19,13 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       zoom: 13,
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
+      onMapCreated: (controller) {
+        controller = controller;
+      },
       cameraTargetBounds: CameraTargetBounds(
         LatLngBounds(
           southwest: const LatLng(30.810456602245626, 32.28496915086855),
@@ -30,6 +34,11 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       ),
       initialCameraPosition: initialCameraPosition,
     );
+  }
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
 
