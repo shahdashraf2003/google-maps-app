@@ -16,29 +16,51 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     super.initState();
     initialCameraPosition = CameraPosition(
       target: LatLng(30.863139458194, 32.31127632883563),
-      zoom: 13,
+      zoom: 13.5,
     );
   }
-  
-  @override
-  Widget build(BuildContext context) {
-    return GoogleMap(
-      onMapCreated: (controller) {
-        controller = controller;
-      },
-      cameraTargetBounds: CameraTargetBounds(
-        LatLngBounds(
-          southwest: const LatLng(30.810456602245626, 32.28496915086855),
-          northeast: const LatLng(30.878020284717195, 32.33217750066308),
-        ),
-      ),
-      initialCameraPosition: initialCameraPosition,
-    );
-  }
+
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GoogleMap(
+          onMapCreated: (GoogleMapController mapController) {
+            controller = mapController;
+          },
+          // cameraTargetBounds: CameraTargetBounds(
+          //   LatLngBounds(
+          //     southwest: const LatLng(30.810456602245626, 32.28496915086855),
+          //     northeast: const LatLng(30.878020284717195, 32.33217750066308),
+          //   ),
+          // ),
+          initialCameraPosition: initialCameraPosition,
+        ),
+        Positioned(
+          bottom: 10,
+          right: 70,
+          left: 70,
+          child: FloatingActionButton(
+            onPressed: () {
+              controller.animateCamera(
+                //new camera position || target|| zoom||latlag
+                CameraUpdate.newLatLngZoom(
+                  LatLng(31.265233651608934, 32.3009611960651),
+                  12,
+                ),
+              );
+            },
+            child: const Icon(Icons.location_on),
+          ),
+        ),
+      ],
+    );
   }
 }
 
