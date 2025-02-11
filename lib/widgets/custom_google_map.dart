@@ -79,24 +79,29 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     setState(() {});
   }
 
-  void initMarkers() {
+  void initMarkers() async {
+    var customMarkerIcon = await BitmapDescriptor.asset(
+      ImageConfiguration(),
+      'assets/images/green-location-icons-17.png',
+    );
+    var myMarkers =
+        places
+            .map(
+              (placeModel) => Marker(
+                icon: customMarkerIcon,
+                infoWindow: InfoWindow(title: placeModel.name),
+                markerId: MarkerId(placeModel.id.toString()),
+                position: placeModel.latlng,
+              ),
+            )
+            .toSet();
+    markers.addAll(myMarkers);
+
     // Marker myMarker = Marker(
     //   markerId: MarkerId('1'),
     //   position: LatLng(30.863139458194, 32.31127632883563),
     // );
     // markers.add(myMarker);
-    var myMarkers=places
-        .map(
-          (placeModel) => Marker(
-            infoWindow: InfoWindow(
-              title: placeModel.name,
-            ),
-            markerId: MarkerId(placeModel.id.toString()),
-            position: placeModel.latlng,
-          ),
-        )
-        .toSet();
-    markers.addAll(myMarkers);
   }
 }
 
