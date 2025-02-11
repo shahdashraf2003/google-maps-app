@@ -37,6 +37,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       children: [
         GoogleMap(
           //mapType: MapType.satellite,
+          zoomControlsEnabled: false,
           style: mapStyle,
           onMapCreated: (GoogleMapController mapController) {
             controller = mapController;
