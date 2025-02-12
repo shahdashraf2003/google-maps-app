@@ -16,6 +16,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   Set<Marker> markers = {};
   Set<Polyline> polylines = {};
   Set<Polygon> polygons = {};
+  Set<Circle> circles = {};
 
   @override
   void initState() {
@@ -29,6 +30,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     initMarkers();
     initPolylines();
     initPolygons();
+    initCircles();
   }
 
   @override
@@ -59,6 +61,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           markers: markers,
           polylines: polylines, //just for lines
           polygons: polygons, // shapes (lines with filled color)
+          circles: circles, 
         ),
         Positioned(
           bottom: 10,
@@ -173,7 +176,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           LatLng(26.964264977589732, 29.567082549378082),
           LatLng(26.12299108827917, 29.403533035699766),
           LatLng(25.94664670870367, 28.19326663448024),
-      
         ],
       ], //to make a hole in the polygon and should be inside the polygon
       points: [
@@ -195,6 +197,18 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       ],
     );
     polygons.add(egyptPolygon);
+  }
+  
+  void initCircles() {
+    Circle circle = Circle(
+      circleId: CircleId('1'),
+      center: LatLng(30.863139458194, 32.31127632883563),
+      radius: 10000,
+      fillColor: const Color.fromARGB(255, 213, 180, 228),
+      strokeColor: const Color.fromARGB(255, 213, 180, 228),
+      strokeWidth: 2,
+    );
+    circles.add(circle);
   }
 }
 
