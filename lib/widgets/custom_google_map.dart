@@ -15,6 +15,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   String? mapStyle;
   Set<Marker> markers = {};
   Set<Polyline> polylines = {};
+  Set<Polygon> polygons = {};
 
   @override
   void initState() {
@@ -22,11 +23,12 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     initialCameraPosition = CameraPosition(
       target: LatLng(30.863139458194, 32.31127632883563),
       //zoom: 13,
-      zoom:1,
+      zoom: 5,
     );
     initMapStyle();
     initMarkers();
     initPolylines();
+    initPolygons();
   }
 
   @override
@@ -55,7 +57,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           // ),
           initialCameraPosition: initialCameraPosition,
           markers: markers,
-          polylines: polylines,
+          polylines: polylines, //just for lines
+          polygons: polygons, // shapes (lines with filled color)
         ),
         Positioned(
           bottom: 10,
@@ -140,8 +143,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         LatLng(30.853768675021822, 32.343266834642506),
       ],
     );
-     Polyline polylineWorld = Polyline(
-      geodesic: true,//to make the line in curve because the earth is not flat
+    Polyline polylineWorld = Polyline(
+      geodesic: true, //to make the line in curve because the earth is not flat
       polylineId: PolylineId('3'),
       zIndex: 3,
       color: Colors.lightBlueAccent,
@@ -156,6 +159,42 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     polylines.add(polyline1);
     polylines.add(polyline2);
     polylines.add(polylineWorld);
+  }
+
+  void initPolygons() {
+    Polygon egyptPolygon = Polygon(
+      polygonId: PolygonId('1'),
+      fillColor: Colors.black45,
+      strokeColor: Colors.black45,
+      strokeWidth: 2,
+      holes: [
+        [
+          LatLng(27.087673673991652, 28.497280313604296),
+          LatLng(26.964264977589732, 29.567082549378082),
+          LatLng(26.12299108827917, 29.403533035699766),
+          LatLng(25.94664670870367, 28.19326663448024),
+      
+        ],
+      ], //to make a hole in the polygon and should be inside the polygon
+      points: [
+        LatLng(22.124711633301946, 24.974973620817988),
+        LatLng(29.28485171310749, 25.01891893159485),
+        LatLng(30.20058054687552, 24.66735644537998),
+        LatLng(30.23855381977006, 24.711301756156832),
+        LatLng(30.73086791593862, 24.974973620817988),
+        LatLng(31.333355820565775, 24.843137688487413),
+        LatLng(31.707967203153746, 25.10680955314856),
+        LatLng(31.808437748951427, 25.348814361444347),
+        LatLng(30.759141501615186, 29.05641869133003),
+        LatLng(31.048344686273772, 29.706453216699593),
+        LatLng(31.583108380876226, 31.006522267438726),
+        LatLng(31.4394324784571, 31.825084262348554),
+        LatLng(31.089588015147836, 32.64364625725838),
+        LatLng(30.02535362645364, 32.55486443683632),
+        LatLng(22.165415205484816, 36.708371598239175),
+      ],
+    );
+    polygons.add(egyptPolygon);
   }
 }
 
