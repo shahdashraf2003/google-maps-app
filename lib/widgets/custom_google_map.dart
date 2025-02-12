@@ -14,15 +14,19 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late GoogleMapController controller;
   String? mapStyle;
   Set<Marker> markers = {};
+  Set<Polyline> polylines = {};
+
   @override
   void initState() {
     super.initState();
     initialCameraPosition = CameraPosition(
       target: LatLng(30.863139458194, 32.31127632883563),
-      zoom: 13.5,
+      //zoom: 13,
+      zoom:1,
     );
     initMapStyle();
     initMarkers();
+    initPolylines();
   }
 
   @override
@@ -51,6 +55,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           // ),
           initialCameraPosition: initialCameraPosition,
           markers: markers,
+          polylines: polylines,
         ),
         Positioned(
           bottom: 10,
@@ -103,6 +108,54 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     //   position: LatLng(30.863139458194, 32.31127632883563),
     // );
     // markers.add(myMarker);
+  }
+
+  void initPolylines() {
+    Polyline polyline1 = Polyline(
+      polylineId: PolylineId('1'),
+      zIndex: 2, //if it take bigger value it will be above the other polyline
+      color: Colors.red,
+      endCap: Cap.roundCap,
+      startCap: Cap.roundCap,
+      width: 5,
+      points: [
+        places[0].latlng,
+        places[1].latlng,
+        places[2].latlng,
+        LatLng(30.876469813096787, 32.33976147913657),
+        LatLng(30.8763419139233, 32.36598879515685),
+        LatLng(30.919470773085674, 32.313638927785355),
+      ],
+    );
+    Polyline polyline2 = Polyline(
+      polylineId: PolylineId('2'),
+      zIndex: 1,
+      //patterns: [PatternItem.dot], not real lines
+      color: Colors.greenAccent,
+      endCap: Cap.roundCap,
+      startCap: Cap.roundCap,
+      width: 5,
+      points: [
+        LatLng(30.850600331654498, 32.29056526338708),
+        LatLng(30.853768675021822, 32.343266834642506),
+      ],
+    );
+     Polyline polylineWorld = Polyline(
+      geodesic: true,//to make the line in curve because the earth is not flat
+      polylineId: PolylineId('3'),
+      zIndex: 3,
+      color: Colors.lightBlueAccent,
+      endCap: Cap.roundCap,
+      startCap: Cap.roundCap,
+      width: 5,
+      points: [
+        LatLng(83.97272072531403, 40.75121293223401),
+        LatLng(-31.655255283706108, 23.700432033754932),
+      ],
+    );
+    polylines.add(polyline1);
+    polylines.add(polyline2);
+    polylines.add(polylineWorld);
   }
 }
 
