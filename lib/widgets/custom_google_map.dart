@@ -228,6 +228,19 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       }
     }
   }
+
+  checkAndRequestLocationPermission() async{
+    var permissionStatus = await location.hasPermission();
+    if(permissionStatus==PermissionStatus.denied){
+      permissionStatus = await location.requestPermission();
+      if(permissionStatus!=PermissionStatus.granted){
+        return SnackBar(content: Text('Location Permission is denied'),
+        backgroundColor: Colors.red,
+        );
+      }
+    }
+  }
+
 }
 
 //zoom level
