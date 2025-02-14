@@ -36,7 +36,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     initCircles();
 
     location = Location();
-    checkAndRequestLocationService();
+    setMylocation();
   }
 
   @override
@@ -216,31 +216,43 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     );
     circles.add(circle);
   }
-  
-   checkAndRequestLocationService() async{
-    var isServiceEnabled =await location.serviceEnabled();
+
+  Future<void> checkAndRequestLocationService() async {
+    var isServiceEnabled = await location.serviceEnabled();
     if (!isServiceEnabled) {
-     isServiceEnabled=await location.requestService();
-      if(!isServiceEnabled){
-        return SnackBar(content: Text('Location Service is disabled'),
-        backgroundColor: Colors.red,
-        );
-      }
+      isServiceEnabled = await location.requestService();
+      if (!isServiceEnabled) {}
     }
   }
 
-  checkAndRequestLocationPermission() async{
+  Future<bool> checkAndRequestLocationPermission() async {
     var permissionStatus = await location.hasPermission();
-    if(permissionStatus==PermissionStatus.denied){
+    if (permissionStatus == PermissionStatus.deniedForever) {
+      return false;
+    }
+
+    if (permissionStatus == PermissionStatus.denied) {
       permissionStatus = await location.requestPermission();
-      if(permissionStatus!=PermissionStatus.granted){
-        return SnackBar(content: Text('Location Permission is denied'),
-        backgroundColor: Colors.red,
-        );
+      if (permissionStatus != PermissionStatus.granted) {
+        return false;
       }
     }
+    return true;
   }
 
+  void getLocationData() {
+    location.onLocationChanged.listen((locationData) {});
+  }
+
+  void setMylocation() async {
+    await checkAndRequestLocationService();
+    bool hasPermission = await checkAndRequestLocationPermission();
+    if (hasPermission) {
+      getLocationData();
+    }else{
+      
+    }
+  }
 }
 
 //zoom level
