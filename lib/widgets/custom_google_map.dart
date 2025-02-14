@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:maps_app/models/place_model.dart';
 
 class CustomGoogleMap extends StatefulWidget {
@@ -18,6 +19,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   Set<Polygon> polygons = {};
   Set<Circle> circles = {};
 
+  late Location location;
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +34,9 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     initPolylines();
     initPolygons();
     initCircles();
+
+    location = Location();
+    checkAndRequestLocationService();
   }
 
   @override
@@ -61,7 +67,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           markers: markers,
           polylines: polylines, //just for lines
           polygons: polygons, // shapes (lines with filled color)
-          circles: circles, 
+          circles: circles,
         ),
         Positioned(
           bottom: 10,
@@ -198,7 +204,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     );
     polygons.add(egyptPolygon);
   }
-  
+
   void initCircles() {
     Circle circle = Circle(
       circleId: CircleId('1'),
@@ -210,7 +216,20 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     );
     circles.add(circle);
   }
+  
+   checkAndRequestLocationService() async{
+    var isServiceEnabled =await location.serviceEnabled();
+    if (!isServiceEnabled) {
+     isServiceEnabled=await location.requestService();
+      if(!isServiceEnabled){
+        return SnackBar(content: Text('Location Service is disabled'),
+        backgroundColor: Colors.red,
+        );
+      }
+    }
+  }
 }
+
 //zoom level
 //world view 0->3
 //country view 4->6
