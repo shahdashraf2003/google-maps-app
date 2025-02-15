@@ -245,12 +245,24 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
       var cameraPosition=CameraPosition(
         target: LatLng(locationData.latitude!, locationData.longitude!),
+        zoom: 15,
         
       );
       controller?.animateCamera(
         CameraUpdate.newCameraPosition(cameraPosition),
       );
+
+
+      Marker myLocationMarker = Marker(
+      markerId: MarkerId('my_location_marker'),
+      position: LatLng(locationData.latitude!, locationData.longitude!),
+    );
+    setState(() {
+      
     });
+    markers.add(myLocationMarker);
+    });
+    
   }
 
   void setMylocation() async {
