@@ -241,28 +241,25 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 
   void getLocationData() {
-    location.onLocationChanged.listen((locationData) {
+    location.changeSettings(
+      distanceFilter:
+          2, //every 1s: listen work-> if the user move 2 meters or more it will update the location else it will not
+    );
 
-      var cameraPosition=CameraPosition(
+    location.onLocationChanged.listen((locationData) {
+      var cameraPosition = CameraPosition(
         target: LatLng(locationData.latitude!, locationData.longitude!),
         zoom: 15,
-        
       );
-      controller?.animateCamera(
-        CameraUpdate.newCameraPosition(cameraPosition),
-      );
-
+      controller?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
       Marker myLocationMarker = Marker(
-      markerId: MarkerId('my_location_marker'),
-      position: LatLng(locationData.latitude!, locationData.longitude!),
-    );
-    setState(() {
-      
+        markerId: MarkerId('my_location_marker'),
+        position: LatLng(locationData.latitude!, locationData.longitude!),
+      );
+      setState(() {});
+      markers.add(myLocationMarker);
     });
-    markers.add(myLocationMarker);
-    });
-    
   }
 
   void setMylocation() async {
