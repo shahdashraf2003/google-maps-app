@@ -12,7 +12,7 @@ class CustomGoogleMap extends StatefulWidget {
 
 class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late CameraPosition initialCameraPosition;
-  late GoogleMapController controller;
+  GoogleMapController? controller;
   String? mapStyle;
   Set<Marker> markers = {};
   Set<Polyline> polylines = {};
@@ -41,7 +41,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
   @override
   void dispose() {
-    controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -75,7 +75,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           left: 70,
           child: FloatingActionButton(
             onPressed: () {
-              controller.animateCamera(
+              controller?.animateCamera(
                 //new camera position || target|| zoom||latlag
                 CameraUpdate.newLatLngZoom(
                   LatLng(31.265233651608934, 32.3009611960651),
@@ -241,7 +241,16 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 
   void getLocationData() {
-    location.onLocationChanged.listen((locationData) {});
+    location.onLocationChanged.listen((locationData) {
+
+      var cameraPosition=CameraPosition(
+        target: LatLng(locationData.latitude!, locationData.longitude!),
+        
+      );
+      controller?.animateCamera(
+        CameraUpdate.newCameraPosition(cameraPosition),
+      );
+    });
   }
 
   void setMylocation() async {
@@ -249,9 +258,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     bool hasPermission = await checkAndRequestLocationPermission();
     if (hasPermission) {
       getLocationData();
-    }else{
-      
-    }
+    } else {}
   }
 }
 
