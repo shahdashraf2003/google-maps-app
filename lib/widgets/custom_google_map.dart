@@ -241,18 +241,11 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
   void setMyCameraPosition(LocationData locationData) {
     if (isFirstCall) {
-      initialCameraPosition = CameraPosition(
+      var cameraPosition = CameraPosition(
         target: LatLng(locationData.latitude!, locationData.longitude!),
         zoom: 17,
       );
-      controller?.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: LatLng(locationData.latitude!, locationData.longitude!),
-            zoom: 17,
-          ),
-        ),
-      );
+      controller?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
       isFirstCall = false;
     } else {
