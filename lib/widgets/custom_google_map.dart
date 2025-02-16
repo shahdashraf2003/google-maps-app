@@ -20,6 +20,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   Set<Polygon> polygons = {};
   Set<Circle> circles = {};
   late LocationService locationService;
+  bool isFirstCall = true;
 
   @override
   void initState() {
@@ -27,7 +28,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     initialCameraPosition = CameraPosition(
       target: LatLng(30.863139458194, 32.31127632883563),
       //zoom: 13,
-      zoom: 5,
+      zoom: 1,
     );
     initMapStyle();
     initMarkers();
@@ -221,7 +222,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     bool hasPermission =
         await locationService.checkAndRequestLocationPermission();
     if (hasPermission) {
-      locationService.getRealTimeLocationData(2, (locationData) {
+      locationService.getRealTimeLocationData(3, (locationData) {
         setMyCameraPosition(locationData);
 
         setMyLocationMarker(locationData);
@@ -239,11 +240,28 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 
   void setMyCameraPosition(LocationData locationData) {
-    var cameraPosition = CameraPosition(
-      target: LatLng(locationData.latitude!, locationData.longitude!),
-      zoom: 15,
-    );
-    controller?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    if (isFirstCall) {
+      initialCameraPosition = CameraPosition(
+        target: LatLng(locationData.latitude!, locationData.longitude!),
+        zoom: 17,
+      );
+      controller?.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(locationData.latitude!, locationData.longitude!),
+            zoom: 17,
+          ),
+        ),
+      );
+
+      isFirstCall = false;
+    } else {
+      controller?.animateCamera(
+        CameraUpdate.newLatLng(
+          LatLng(locationData.latitude!, locationData.longitude!),
+        ),
+      );
+    }
   }
 }
 
